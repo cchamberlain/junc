@@ -1,0 +1,118 @@
+#!/bin/bash
+#
+# Handles encryption decryption of stuff
+
+set -e
+
+NC='\033[0m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+
+encrypt=false
+decrypt=false
+net_encryption=false
+section=""
+
+usage_short="${CYAN}Usage: cryptkeeper [-e] [-d] [-n] [-s section] path"
+usage_long="$usage_short\n-e: Encrypt target."
+usage_long="$usage_long\n-d: Decrypts target."
+usage_long="$usage_long\n-n: Specifies to use .NET encryption."
+usage_long="$usage_long\n-s: Specifies section of file to be encrypted.${NC}"
+
+usage_short="$usage_short\nUse -h to get supported command information.${NC}"
+
+if [ "$#" == "0" ] ; then
+  >&2 echo -e "$usage_short"
+  exit 1
+fi
+
+options="edns:h"
+shopt -u nocasematch
+OPTIND=1
+while getopts "$options" opt ; do
+    case "$opt" in
+    e )
+      encrypt=true
+      ;;
+    d )
+      decrypt=true
+      ;;
+    n )
+      net_encryption=true
+      ;;
+    s )
+      section=$OPTARG
+      ;;
+    h )
+      >&2 echo -e "$usage_long" && exit 1
+      exit 0
+      ;;
+    \?)
+      >&2 echo -e "Unknown option: -$OPTARG"
+      >&2 echo -e "$usage_short"
+      exit 1
+      ;;
+    : )
+      >&2 echo -e "Missing option argument for -$OPTARG"
+      >&2 echo -e "$usage_short"
+      exit 1
+      ;;
+    * )
+      >&2 echo -e "Unimplemented option: -$OPTARG" && exit 1
+      >&2 echo -e "$usage_short"
+      exit 1
+    esac
+done
+shift $((OPTIND-1))
+
+file_path="$1"
+shift
+
+if [ "$encrypt" = "$decrypt" ] ; then
+  >&2 echo -e "${RED}--Must specify encrypt (-e) or decrypt (-d) but not both--${NC}"
+  exit 1
+fi
+
+to_win_path() {
+  if [ "$1" ] ; then
+    # handle absolute
+    if [[ "$1" == /* ]] ; then
+      # strip leading slash and convert to backslash
+      win_path=$(echo "$1" | sed -e 's/^\///'  -e 's/\//\\\\/g')
+      # Add semicolon after drive
+      win_path=$(echo "${win_path:0:1}:${win_path:1}")
+      echo -en "$win_path"
+    else
+      # convert to backslash
+      win_path=$(echo "$1" | sed 's/\//\\\\/g')
+      echo -en "$win_path"
+    fi
+  fi
+}
+
+file_root="$(dirname "$file_path")"
+file_name="$(basename "$file_path")"
+
+if [ "$net_encryption" = true ] ; then
+  if [ "$section" = "" ] ; then
+    >&2 echo -e "${RED}--Must set app config section to encrypt using .NET encryption--${NC}"
+    exit 1
+  fi
+
+  web_config_path="$file_root/web.config"
+  cp "$file_path" "$web_config_path"
+  win_file_root="$(to_win_path "$file_root")"
+  if [ "$encrypt" = true ] ; then
+    >&2 echo "--Encrypting $section of config in $win_file_root--"
+    aspnet_regiis -pef "$section" "$win_file_root"
+    >&2 echo -e "${GREEN}--Encryption completed successfully--${NC}"
+  elif [ "$decrypt" = true ] ; then
+    >&2 echo "--Decrypting $section of config in $win_file_root--"
+    aspnet_regiis -pdf "$section" "$win_file_root"
+    >&2 echo -e "${GREEN}--Decryption completed successfully--${NC}"
+  fi
+  rm "$file_path"
+  mv "$web_config_path" "$file_path"
+fi
+
