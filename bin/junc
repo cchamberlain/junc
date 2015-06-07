@@ -16,7 +16,7 @@ push_junc=false
 pop_junc=false
 junc_root="/c/junc"
 name_length=5
-dir_path=$(pwd)
+dir_path="$PWD"
 
 usage_short="${BLUE}usage: junc [-p] [-d] [-r /path/to/junction/root] [path]"
 usage_long="$usage_short\n-p: create junction and push directory to top of stack (default: $push_junc)"
@@ -68,8 +68,8 @@ shift $((OPTIND-1))
 
 if [ "$1" != "" ] ; then
   dir_path="$1"
+  shift
 fi
-shift
 
 if [ "$push_junc" = true ] && [ "$pop_junc" = true ] ; then
   >&2 echo -e "${RED}- Can push (-p) or pop (-d) but not both -${NC}"
@@ -101,6 +101,7 @@ win_dir_path="$(to_win_path "$dir_path")"
 
 # If -d flag specified, popd ->
 if [ "$pop_junc" = true ] ; then
+  >&2 echo -e "${BLUE}- popping and deleting $win_dir_path -${NC}"
   popd
   cmd //c rmdir "$win_dir_path"
   exit 0
