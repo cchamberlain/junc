@@ -1,5 +1,10 @@
 #!/bin/bash
 #
-# usage: . juncp
+# usage:
+# JUNC_BIN="/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin"
+# JUNCP="$JUNC_BIN/juncp"
+# JUNCD="$JUNC_BIN/juncd"
+#
+# . "$JUNCP"
 
 pushd "$(junc -p)"
