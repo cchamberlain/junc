@@ -10,6 +10,6 @@
 
 BASHRC_PATH="$HOME/.bashrc"
 source_string=". \"/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin/junc-rc\""
-if ! grep -q "$source_string"  "$BASHRC_PATH"; then
+if [ ! -f "$BASHRC_PATH" ] || ! grep -q "$source_string"  "$BASHRC_PATH"; then
   echo "$source_string">>"$BASHRC_PATH"
 fi
