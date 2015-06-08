@@ -10,5 +10,11 @@
 # pushj
 # popj
 
-JUNC_BIN="/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin"
-echo -en "$JUNC_BIN/push-junc"
+export pushj_path="$(PUSHJ_PATH)"
+export popj_path="$(POPJ_PATH)"
+
+pushj() { . "$pushj_path" }
+popj() { . "$popj_path" }
+
+export -f pushj
+export -f popj
