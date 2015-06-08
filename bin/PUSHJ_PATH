@@ -1,12 +1,16 @@
 #!/bin/bash
 #
 # usage:
-# pushj="$PUSHJ_PATH"
-# popj="$POPJ_PATH"
+# npm install -g junc
 #
-# use similiar to pushd / popd to move to a temporary junctioned directory
-# . "$pushj"
-# . "$popj"
+# ### Add this to top of script or bashrc
+# ### If you are using this heavy you can set variables for these values and reference the variables.
+# pushj() { . "$(PUSHJ_PATH)" }
+# popj() { . "$(POPJ_PATH)" }
+#
+# ### Use similiar to pushd / popd to move to a temporary junctioned directory
+# pushj
+# popj
 
 JUNC_BIN="/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin"
-echo -en "$JUNC_BIN/juncp"
+echo -en "$JUNC_BIN/push-junc"
