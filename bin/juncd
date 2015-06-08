@@ -2,4 +2,6 @@
 #
 # usage: . juncd
 
-popd && junc -d "$PWD"
+export JUNC_PATH="$PWD"
+popd
+junc -d "$JUNC_PATH"

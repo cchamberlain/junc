@@ -101,25 +101,20 @@ win_dir_path="$(to_win_path "$dir_path")"
 # If -d flag specified, remove and echo for popd and other commands->
 if [ "$pop_junc" = true ] ; then
   cmd //c rmdir "$win_dir_path" &>/dev/null
-  echo -en "$win_dir_path"
-  exit 0
-fi
-
-# Perform junction, loop in case random returns the same name twice
-junc_name="$(generate_name "$name_length")"
-junc_path="$junc_root/$junc_name"
-while [ -e "$junc_path" ] ; do
+  echo -en "$dir_path" |
+elif [ "$push_junc" = true ] ; then
+  # Perform junction, loop in case random returns the same name twice
   junc_name="$(generate_name "$name_length")"
   junc_path="$junc_root/$junc_name"
-done
+  while [ -e "$junc_path" ] ; do
+    junc_name="$(generate_name "$name_length")"
+    junc_path="$junc_root/$junc_name"
+  done
 
-win_junc_path="$(to_win_path "$junc_path")"
+  win_junc_path="$(to_win_path "$junc_path")"
 
-mkdir -p "$junc_root" &>/dev/null
-cmd //c mklink //J "$win_junc_path" "$win_dir_path" &>/dev/null
+  mkdir -p "$junc_root" &>/dev/null
+  cmd //c mklink //J "$win_junc_path" "$win_dir_path" &>/dev/null
 
-# If -p flag specified, echo for pushd ->
-if [ "$push_junc" = true ] ; then
   echo -en "$junc_path"
-  exit 0
 fi
