@@ -8,6 +8,5 @@
 # . "$pushj"
 # . "$popj"
 
-JUNC_PATH="$PWD"
-popd
-junc -d "$JUNC_PATH"
+JUNC_BIN="/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin"
+echo -en "$JUNC_BIN/juncp"

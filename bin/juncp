@@ -1,10 +1,11 @@
 #!/bin/bash
 #
 # usage:
-# JUNC_BIN="/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin"
-# JUNCP="$JUNC_BIN/juncp"
-# JUNCD="$JUNC_BIN/juncd"
+# pushj="$PUSHJ_PATH"
+# popj="$POPJ_PATH"
 #
-# . "$JUNCP"
+# use similiar to pushd / popd to move to a temporary junctioned directory
+# . "$pushj"
+# . "$popj"
 
-pushd "$(junc -p)"
+pushd "$(junc)"
