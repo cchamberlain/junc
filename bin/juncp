@@ -2,4 +2,4 @@
 #
 # usage: . juncp
 
-pushd "$(junc -p)"
+junc_path="$(junc -p)" && sleep 2 && pushd "$junc_path"
