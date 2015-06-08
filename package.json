@@ -23,7 +23,5 @@
   "homepage": "https://github.com/cchamberlain/junc#readme",
   "preferGlobal": true,
   "scripts": {
-    "install-bashrc": "junc-install",
-    "uninstall-bashrc": "junc-uninstall"
   }
 }
