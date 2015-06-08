@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# usage: junc [-p] /path/to/dir
+# usage: junc [-p] [-d] [-j junction-root] [-c name-length] [dir-path]
 
 set -e
 
@@ -18,16 +18,17 @@ junc_root="/c/junc"
 name_length=5
 dir_path="$PWD"
 
-usage_short="${BLUE}usage: junc [-p] [-d] [-r /path/to/junction/root] [path]"
+
+usage_short="${BLUE}usage: junc [-p] [-d] [-j junction-root] [-c name-length] [dir-path]"
 usage_long="$usage_short\n-p: create junction and push directory to top of stack (default: $push_junc)"
 usage_long="$usage_long\n-d: delete junction at path and pop from stack (default: $pop_junc)"
-usage_long="$usage_long\n-r: path to junction root (default: $junc_root)"
+usage_long="$usage_long\n-j: path to junction root (default: $junc_root)"
 usage_long="$usage_long\n-c: length of randomly generated junction names (default: $name_length)"
-usage_long="$usage_long\npath: path to the directory getting junctioned. (default: $dir_path)${NC}"
+usage_long="$usage_long\ndir-path: path to the directory getting junctioned (default: $dir_path)${NC}"
 
-usage_short="$usage_short\nUse -h to get supported command information.${NC}"
+usage_short="$usage_short\nuse -h to get supported command information.${NC}"
 
-options=":pdr:c:h"
+options=":pdj:c:h"
 shopt -u nocasematch
 OPTIND=1
 while getopts "$options" opt ; do
@@ -38,7 +39,7 @@ while getopts "$options" opt ; do
     d )
       pop_junc=true
       ;;
-    r )
+    j )
       junc_root="$OPTARG"
       ;;
     c )
@@ -66,8 +67,10 @@ while getopts "$options" opt ; do
 done
 shift $((OPTIND-1))
 
+enable_pop=true
 if [ "$1" != "" ] ; then
   dir_path="$1"
+  enable_pop=false
   shift
 fi
 
@@ -99,17 +102,17 @@ to_win_path() {
 
 win_dir_path="$(to_win_path "$dir_path")"
 
-# If -d flag specified, popd ->
+# If -d flag specified, popd & remove ->
 if [ "$pop_junc" = true ] ; then
   >&2 echo -e "${BLUE}- popping and deleting $win_dir_path -${NC}"
-  popd
+  if [ "enable_pop" = true ] ; then
+    popd
+  fi
   cmd //c rmdir "$win_dir_path"
   exit 0
 fi
 
-
 # Perform junction
-
 junc_name="$(generate_name "$name_length")"
 junc_path="$junc_root/$junc_name"
 while [ -e "$junc_path" ] ; do
@@ -125,6 +128,5 @@ cmd //c mklink //J "$win_junc_path" "$win_dir_path"
 # If -p flag specified, pushd ->
 if [ "$push_junc" = true ] ; then
   pushd "$junc_path"
-  cmd //c rmdir "$win_dir_path"
   exit 0
 fi
