@@ -22,5 +22,8 @@
   },
   "homepage": "https://github.com/cchamberlain/junc#readme",
   "preferGlobal": true,
-  "scripts": {}
+  "scripts": {
+      "postinstall": "bin/junc-install",
+      "postuninstall": "bin/junc-uninstall"
+  }
 }
