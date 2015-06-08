@@ -2,14 +2,16 @@
 #
 # usage:
 # ### Install and resource bashrc to get new functions
-# npm install -g junc && . ~/.bashrc
+# npm install -g junc
+# junc-install ["$BASHRC_PATH"]
+# . "$BASHRC_PATH"
 #
 # ### Use similiar to pushd / popd to move to a temporary junctioned directory
 # pushj [directory-path]
 # popj
 
-BASHRC_PATH="$HOME/.bashrc"
+RC_PATH="${1-"$HOME/.bashrc"}"
 source_string=". \"/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin/junc-rc\""
-if [ ! -f "$BASHRC_PATH" ] || ! grep -q "$source_string"  "$BASHRC_PATH"; then
-  echo "$source_string">>"$BASHRC_PATH"
+if [ ! -f "$RC_PATH" ] || ! grep -q "$source_string"  "$RC_PATH"; then
+  echo "$source_string">>"$RC_PATH"
 fi
