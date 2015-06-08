@@ -1,6 +1,6 @@
 {
   "name": "junc",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Node module to handle synchronous creation of junctions in Windows.",
   "main": "index.js",
   "directories": {
