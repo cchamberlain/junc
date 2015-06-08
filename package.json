@@ -1,6 +1,6 @@
 {
   "name": "junc",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "Node module to handle synchronous creation of junctions in Windows.",
   "main": "index.js",
   "directories": {
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/cchamberlain/junc#readme",
   "preferGlobal": true,
   "scripts": {
-      "postinstall": "bin/junc-install",
-      "postuninstall": "bin/junc-uninstall"
+    "postinstall": "bin/junc-install",
+    "postuninstall": "bin/junc-uninstall"
   }
 }
