@@ -15,6 +15,3 @@ export popj_path="$(POPJ_PATH)"
 
 pushj() { . "$pushj_path" }
 popj() { . "$popj_path" }
-
-export -f pushj
-export -f popj
