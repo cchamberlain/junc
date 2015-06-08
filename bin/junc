@@ -102,8 +102,8 @@ win_dir_path="$(to_win_path "$dir_path")"
 
 # If -d flag specified, remove and echo for popd and other commands->
 if [ "$pop_junc" = true ] ; then
-  cmd //c rmdir "$win_dir_path"
-  echo "$win_dir_path"
+  cmd //c rmdir "$win_dir_path" &>/dev/null
+  echo -en "$win_dir_path"
   exit 0
 fi
 
@@ -117,11 +117,11 @@ done
 
 win_junc_path="$(to_win_path "$junc_path")"
 
-mkdir -p "$junc_root"
-cmd //c mklink //J "$win_junc_path" "$win_dir_path"
+mkdir -p "$junc_root" &>/dev/null
+cmd //c mklink //J "$win_junc_path" "$win_dir_path" &>/dev/null
 
 # If -p flag specified, echo for pushd ->
 if [ "$push_junc" = true ] ; then
-  echo "$junc_path"
+  echo -en "$junc_path"
   exit 0
 fi
