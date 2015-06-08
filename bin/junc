@@ -91,11 +91,11 @@ to_win_path() {
       win_path=$(echo "$1" | sed -e 's/^\///'  -e 's/\//\\\\/g')
       # Add semicolon after drive
       win_path=$(echo "${win_path:0:1}:${win_path:1}")
-      echo -en "$win_path"
+      echo -n "$win_path"
     else
       # convert to backslash
       win_path=$(echo "$1" | sed 's/\//\\\\/g')
-      echo -en "$win_path"
+      echo -n "$win_path"
     fi
   fi
 }
@@ -104,10 +104,10 @@ win_dir_path="$(to_win_path "$dir_path")"
 
 # If -d flag specified, popd & remove ->
 if [ "$pop_junc" = true ] ; then
-  >&2 echo -e "${BLUE}- popping and deleting $win_dir_path -${NC}"
   if [ "enable_pop" = true ] ; then
     popd
   fi
+  >&2 echo "- popping and deleting $win_dir_path -"
   cmd //c rmdir "$win_dir_path"
   exit 0
 fi
