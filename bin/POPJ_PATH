@@ -1,13 +1,13 @@
 #!/bin/bash
 #
 # usage:
+# ### Install and resource bashrc to get new functions
 # npm install -g junc
-#
-# ### source functions and add to .bashrc
-# junc-init
+# junc-install ["$BASHRC_PATH"]
+# . "$BASHRC_PATH"
 #
 # ### Use similiar to pushd / popd to move to a temporary junctioned directory
-# pushj
+# pushj [directory-path]
 # popj
 
 JUNC_BIN="/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin"

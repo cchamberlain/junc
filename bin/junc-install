@@ -10,5 +10,8 @@
 # pushj [directory-path]
 # popj
 
-JUNC_BIN="/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin"
-echo -en "$JUNC_BIN/push-junc"
+RC_PATH="${1-"$HOME/.bashrc"}"
+source_string=". \"/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin/junc-rc\""
+if [ ! -f "$RC_PATH" ] || ! grep -q "$source_string"  "$RC_PATH"; then
+  echo "$source_string">>"$RC_PATH"
+fi
