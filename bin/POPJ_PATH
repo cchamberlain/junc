@@ -3,8 +3,8 @@
 # usage:
 # npm install -g junc
 #
-# ### Add this to top of script or bashrc
-# . "/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin/junc-ref"
+# ### source functions and add to .bashrc
+# junc-init
 #
 # ### Use similiar to pushd / popd to move to a temporary junctioned directory
 # pushj
