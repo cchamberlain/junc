@@ -13,7 +13,7 @@
 export pushj_path="$(PUSHJ_PATH)"
 export popj_path="$(POPJ_PATH)"
 
-pushj() { . "$pushj_path"; }
+pushj() { . "$pushj_path" "$@"; }
 popj() { . "$popj_path"; }
 
 export -f pushj

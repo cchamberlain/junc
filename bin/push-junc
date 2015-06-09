@@ -10,4 +10,4 @@
 # pushj [directory-path]
 # popj
 
-pushd "$(junc)"
+pushd "$(junc "$@")"
