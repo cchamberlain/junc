@@ -11,4 +11,4 @@
 # popj
 
 JUNC_BIN="/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin"
-echo -en "$JUNC_BIN/push-junc"
+printf "%s/push-junc" "$JUNC_BIN"
