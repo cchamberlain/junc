@@ -69,7 +69,7 @@ while getopts "$options" opt ; do
 done
 shift $((OPTIND-1))
 
-if [ "$1" != "" ] ; then
+if [ -n "$1" ] ; then
   dir_path="$1"
   shift
 fi
