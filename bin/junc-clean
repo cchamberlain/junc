@@ -11,7 +11,7 @@
 # popj
 
 for path in /c/junc/*; do
-  dirname = "$(basename "${path}")"
-  pushd "dirname"
+  junc_dir="$(basename "${path}")"
+  pushd "$junc_dir"
   popj
 done
