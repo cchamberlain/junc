@@ -39,22 +39,22 @@ while getopts "$options" opt ; do
       name_length="$OPTARG"
       ;;
     h )
-      >&2 echo -e "$usage_long" && exit 1
+      >&2 printf "%b" "$usage_long" && exit 1
       exit 0
       ;;
     \?)
-      >&2 echo -e "Unknown option: -$OPTARG"
-      >&2 echo -e "$usage_short"
+      >&2 printf "%b" "unknown option: -$OPTARG"
+      >&2 printf "%b" "$usage_short"
       exit 1
       ;;
     : )
-      >&2 echo -e "Missing option argument for -$OPTARG"
-      >&2 echo -e "$usage_short"
+      >&2 printf "%b" "missing option argument for -$OPTARG"
+      >&2 printf "%b" "$usage_short"
       exit 1
       ;;
     * )
-      >&2 echo -e "Unimplemented option: -$OPTARG" && exit 1
-      >&2 echo -e "$usage_short"
+      >&2 printf "%b" "unimplemented option: -$OPTARG"
+      >&2 printf "%b" "$usage_short"
       exit 1
     esac
 done
@@ -74,21 +74,20 @@ to_win_path() {
     # handle absolute
     if [[ "$1" == /* ]] ; then
       # strip leading slash and convert to backslash
-      win_path=$(echo "$1" | sed -e 's/^\///'  -e 's/\//\\\\/g')
+      win_path="$(printf "%s" "$1" | sed "s/^\///" | tr "/" "\\\\")"
       # Add semicolon after drive
-      win_path=$(echo "${win_path:0:1}:${win_path:1}")
-      echo -n "$win_path"
+      win_path="$(printf "%s:%s" "${win_path:0:1}" "${win_path:1}")"
+      printf "%s" "$win_path"
     else
       # convert to backslash
-      win_path=$(echo "$1" | sed 's/\//\\\\/g')
-      echo -n "$win_path"
+      win_path="$(printf "%s" "$1" | tr "/" "\\\\")"
+      printf "%s" "$win_path"
     fi
   fi
 }
 
 win_dir_path="$(to_win_path "$dir_path")"
 
-# If -d flag specified, remove and echo for popd and other commands->
 if [ "$delete_junc" = true ] ; then
   cmd //c rmdir "$win_dir_path" &>/dev/null
   exit 0
@@ -107,4 +106,4 @@ win_junc_path="$(to_win_path "$junc_path")"
 mkdir -p "$junc_root" &>/dev/null
 cmd //c mklink //J "$win_junc_path" "$win_dir_path" &>/dev/null
 
-echo -en "$junc_path"
+printf "%s" "$junc_path"
