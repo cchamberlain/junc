@@ -10,8 +10,10 @@
 # pushj [directory-path]
 # popj
 
-for path in /c/junc/*; do
-  junc_dir="$(basename "${path}")"
-  pushd "$junc_dir"
-  popj
-done
+pushd /c/junc
+  for path in *; do
+    [ -d "${path}" ] || continue
+    pushd "$junc_dir"
+    popj
+  done
+popd
