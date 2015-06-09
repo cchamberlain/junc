@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# usage:
+# ### Install and resource bashrc to get new functions
+# npm install -g junc
+# junc-install ["$BASHRC_PATH"]
+# . "$BASHRC_PATH"
+#
+# ### Use similiar to pushd / popd to move to a temporary junctioned directory
+# pushj [directory-path]
+# popj
+
+for path in /c/junc/*; do
+  dirname = "$(basename "${path}")"
+  pushd "dirname"
+  popj
+done
