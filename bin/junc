@@ -39,22 +39,22 @@ while getopts "$options" opt ; do
       name_length="$OPTARG"
       ;;
     h )
-      >&2 printf "%b" "$usage_long" && exit 1
+      >&2 printf "%s" "$usage_long" && exit 1
       exit 0
       ;;
     \?)
-      >&2 printf "%b" "unknown option: -$OPTARG"
-      >&2 printf "%b" "$usage_short"
+      >&2 printf "%s" "unknown option: -$OPTARG"
+      >&2 printf "%s" "$usage_short"
       exit 1
       ;;
     : )
-      >&2 printf "%b" "missing option argument for -$OPTARG"
-      >&2 printf "%b" "$usage_short"
+      >&2 printf "%s" "missing option argument for -$OPTARG"
+      >&2 printf "%s" "$usage_short"
       exit 1
       ;;
     * )
-      >&2 printf "%b" "unimplemented option: -$OPTARG"
-      >&2 printf "%b" "$usage_short"
+      >&2 printf "%s" "unimplemented option: -$OPTARG"
+      >&2 printf "%s" "$usage_short"
       exit 1
     esac
 done
