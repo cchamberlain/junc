@@ -12,8 +12,8 @@ YELLOW='\033[1;33m'
 
 COPY_FROM_ROOT=""
 COPY_TO_ROOT=""
-recursion_level=0
 recursion_max=10
+recursion_level=$recursion_max
 
 usage_short="${BLUE}usage: junc-copy [-l recursion-level] [-m recursion-max] [target_directory-$PWD] destination_directory${NC}"
 options=":l:m:h"
@@ -57,15 +57,18 @@ else
   exit 1
 fi
 
+
 if [ $recursion_level -lt $recursion_max ]; then
-  for item_path in "$COPY_FROM_ROOT"/*; do
-    if [ -f "$item_path" ]; then
-      mkdir -p "$COPY_TO_ROOT"
-      cp "$item_path" "$COPY_TO_ROOT/$item_path"
-    else
-      junc-copy -l $((recursion_level + 1)) -m $recursion_max "$item_path" "$COPY_TO_ROOT/$item_path"
-    fi
-  done
+  pushd "$COPY_FROM_ROOT"
+    mkdir -p "$COPY_TO_ROOT"
+    for item_path in *; do
+      if [ -f "$item_path" ]; then
+        cp "$item_path" "$COPY_TO_ROOT/$item_path"
+      else
+        junc-copy -l $((recursion_level + 1)) -m $recursion_max "$COPY_FROM_ROOT/$item_path" "$COPY_TO_ROOT/$item_path"
+      fi
+    done
+  popd
 else
   pushj "$COPY_TO_ROOT"
     COPY_TO_JUNC="$PWD"
