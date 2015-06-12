@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# usage: cpj [target_directory-$PWD] destination_directory
+# usage: cpj [-r] [-l recursion-level] [-m recursion-max] [target_directory-$PWD] destination_directory
 
 NC='\033[0m'
 RED='\033[0;31m'
@@ -12,28 +12,76 @@ YELLOW='\033[1;33m'
 
 COPY_FROM_ROOT=""
 COPY_TO_ROOT=""
+recursion_level=0
+recursion_max=10
+
+usage_short="${BLUE}usage: junc-copy [-l recursion-level] [-m recursion-max] [target_directory-$PWD] destination_directory${NC}"
+options=":lmh"
+shopt -u nocasematch
+OPTIND=1
+while getopts "$options" opt ; do
+    case "$opt" in
+    l )
+      recursion_level=$OPTARG
+      ;;
+    m )
+      recursion_max=$OPTARG
+      ;;
+   h )
+      >&2 printf -- "%b\n" "$usage_short"
+      exit 0
+      ;;
+    \?)
+      >&2 printf -- "unknown option: -%b\n" "$OPTARG"
+      >&2 printf -- "%b\n" "$usage_short"
+      exit 1
+      ;;
+    : )
+      >&2 printf -- "missing option argument for -%b\n" "$OPTARG"
+      >&2 printf -- "%b\n" "$usage_short"
+      exit 1
+      ;;
+    * )
+      >&2 printf -- "unimplemented option: -%b\n" "$OPTARG"
+      >&2 printf -- "%b\n" "$usage_short"
+      exit 1
+    esac
+done
+shift $((OPTIND-1))
 
 if [ $# -eq 2 ]; then
   COPY_FROM_ROOT="$1"
   COPY_TO_ROOT="$2"
 else
-  >&2 printf -- "%busage: cpj [target_directory-%s] destination_directory\n%b" "$RED" "$PWD" "$NC"
+  >&2 printf -- "%b\n" "$usage_short"
   exit 1
 fi
 
-pushj "$COPY_TO_ROOT"
-  COPY_TO_JUNC="$PWD"
-  pushj "$COPY_FROM_ROOT"
-    COPY_FROM_JUNC="$PWD"
+if [ $recursion_level -lt $recursion_max ]; then
+  pushd "$COPY_FROM_ROOT"
     for item_path in *; do
-      COPY_TO_JUNC_PATH="$COPY_TO_JUNC/$item_path"
-      if [ -d "$item_path" ]; then
-        pushd "$item_path"
-          cpj "$COPY_TO_JUNC_PATH"
-        popd
+      if [ -f "$item_path" ]; then
+        mkdir -p "$COPY_TO_ROOT"
+        cp "$item_path" "$COPY_TO_ROOT/$item_path"
       else
-        cp "$item_path" "$COPY_TO_JUNC_PATH"
+        junc-copy -l $((recursion_level + 1)) -m $recursion_max "$COPY_FROM_ROOT/$item_path" "$COPY_TO_ROOT/$item_path"
       fi
     done
+  popd
+else
+  pushj "$COPY_TO_ROOT"
+    COPY_TO_JUNC="$PWD"
+    pushj "$COPY_FROM_ROOT"
+     COPY_FROM_JUNC="$PWD"
+       for item_path in *; do
+         COPY_FROM_JUNC_PATH="$COPY_FROM_JUNC/$item_path"
+         COPY_TO_JUNC_PATH="$COPY_TO_JUNC/$item_path"
+         if [ -f "$item_path" ]; then
+           cp "$item_path" "$COPY_TO_JUNC_PATH"
+         else
+           junc-copy "COPY_FROM_JUNC/$item_path" "$COPY_TO_JUNC_PATH"
+         fi
+      done
+    popj
   popj
-popj
+fi

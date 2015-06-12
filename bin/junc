@@ -47,23 +47,23 @@ while getopts "$options" opt ; do
     C )
       clean_flag="$OPTARG"
       ;;
-    h )
-      >&2 printf "%b" "$usage_long" && exit 1
+   h )
+      >&2 printf -- "%b\n" "$usage_long"
       exit 0
       ;;
     \?)
-      >&2 printf "%b" "unknown option: -$OPTARG"
-      >&2 printf "%b" "$usage_short"
+      >&2 printf -- "unknown option: -%b\n" "$OPTARG"
+      >&2 printf -- "%b\n" "$usage_short"
       exit 1
       ;;
     : )
-      >&2 printf "%b" "missing option argument for -$OPTARG"
-      >&2 printf "%b" "$usage_short"
+      >&2 printf -- "missing option argument for -%b\n" "$OPTARG"
+      >&2 printf -- "%b\n" "$usage_short"
       exit 1
       ;;
     * )
-      >&2 printf "%b" "unimplemented option: -$OPTARG"
-      >&2 printf "%b" "$usage_short"
+      >&2 printf -- "unimplemented option: -%b\n" "$OPTARG"
+      >&2 printf -- "%b\n" "$usage_short"
       exit 1
     esac
 done
