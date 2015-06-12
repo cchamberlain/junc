@@ -26,12 +26,13 @@ pushj "$COPY_TO_ROOT"
   pushj "$COPY_FROM_ROOT"
     COPY_FROM_JUNC="$PWD"
     for item_path in *; do
-      COPY_FROM_JUNC_PATH="$COPY_FROM_JUNC/$item_path"
       COPY_TO_JUNC_PATH="$COPY_TO_JUNC/$item_path"
-      if [ -f "$item_path" ]; then
-        cp "$item_path" "$COPY_TO_JUNC_PATH"
+      if [ -d "$item_path" ]; then
+        pushj "$item_path"
+          cpj "$COPY_TO_JUNC_PATH"
+        popj
       else
-        junc-copy "$COPY_FROM_JUNC_PATH" "$COPY_TO_JUNC_PATH"
+        cp "$item_path" "$COPY_TO_JUNC_PATH"
       fi
     done
   popj
