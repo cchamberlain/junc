@@ -79,7 +79,7 @@ else
          if [ -f "$item_path" ]; then
            cp "$item_path" "$COPY_TO_JUNC_PATH"
          else
-           junc-copy "COPY_FROM_JUNC/$item_path" "$COPY_TO_JUNC_PATH"
+           junc-copy "$COPY_FROM_JUNC/$item_path" "$COPY_TO_JUNC_PATH"
          fi
       done
     popj
