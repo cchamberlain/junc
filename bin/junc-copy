@@ -16,7 +16,7 @@ recursion_level=0
 recursion_max=10
 
 usage_short="${BLUE}usage: junc-copy [-l recursion-level] [-m recursion-max] [target_directory-$PWD] destination_directory${NC}"
-options=":lmh"
+options=":l:m:h"
 shopt -u nocasematch
 OPTIND=1
 while getopts "$options" opt ; do
