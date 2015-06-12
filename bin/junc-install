@@ -10,8 +10,14 @@
 # pushj [directory-path]
 # popj
 
-RC_PATH="${1-"$HOME/.bashrc"}"
-source_string=". \"/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin/junc-rc\""
-if [ ! -f "$RC_PATH" ] || ! grep -q "$source_string"  "$RC_PATH"; then
-  printf "%s" "$source_string">>"$RC_PATH"
+RC_PATH="${1-"$HOME/.juncrc"}"
+BASHRC_PATH="$HOME/.bashrc"
+[ -f "$RC_PATH" ] && junc-uninstall
+
+RC_SRC_PATH="$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/junc/bin/juncrc"
+cp "$RC_SRC_PATH" "$RC_PATH"
+
+SOURCE_STRING=". $RC_PATH"
+if ! grep -q "$SOURCE_STRING" "$BASHRC_PATH"; then
+  printf -- "%s" "$SOURCE_STRING" >>"$BASHRC_PATH"
 fi

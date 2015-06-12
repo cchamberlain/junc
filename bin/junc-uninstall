@@ -10,7 +10,5 @@
 # pushj [directory-path]
 # popj
 
-BASHRC_PATH="$HOME/.bashrc"
-if [ -f "$BASHRC_PATH" ] ; then
-  sed -i "/\. \"[ \"A-Za-z0-9\/_]+junc-rc\"/d" "$BASHRC_PATH"
-fi
+RC_PATH="${1-"$HOME/.juncrc"}"
+[ -f "$RC_PATH" ] && rm "$RC_PATH"

@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# usage:
+# ### Install and resource bashrc to get new functions
+# npm install -g junc
+# junc-install
+# . ~/.juncrc
+#
+# ### Use similiar to pushd / popd to move to a temporary junctioned directory
+# pushj [directory-path]
+# popj
+#
+# cdj [directory]
+#
+# cpj [target-directory] destination-directory
+
+pushj() { pushd "$(junc "$@")"; }
+popj() { JUNC_PATH="$PWD"; popd; junc -d "$JUNC_PATH"; }
+cdj() { cd "$(junc "$@")"; }
+
+# Copy directory 1 contents to directory 2 using junctions
+cpj() {
+  COPY_FROM_ROOT=""
+  COPY_TO_ROOT=""
+  if [ $# -eq 2 ]; then
+    COPY_FROM_ROOT="$1"
+    COPY_TO_ROOT="$2"
+  elif [ $# -eq 1 ]; then
+    COPY_FROM_ROOT="$PWD"
+    COPY_TO_ROOT="$1"
+  else
+    >&2 printf -- "usage: cpj [target_directory-$PWD] destination_directory\n"
+    exit 1
+  fi
+
+  pushj "$COPY_TO_ROOT"
+    DEST_JUNC_PATH="$PWD"
+    pushj "$COPY_FROM_ROOT"
+      cp -rf ./ "$DEST_JUNC_PATH"
+    popj
+  popj
+}
+
+export -f pushj
+export -f popj
+export -f cdj
+export -f cpj

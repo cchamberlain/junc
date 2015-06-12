@@ -10,10 +10,10 @@
 # pushj [directory-path]
 # popj
 
-pushd /c/junc
-  for path in *; do
-    [ -d "${path}" ] || continue
+if [ -d /c/junc ]; then
+  for path in /c/junc/*; do
+    [ -d "$path" ] || continue
     pushd "$path"
     popj
   done
-popd
+fi
