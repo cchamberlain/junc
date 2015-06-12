@@ -29,9 +29,11 @@ cpj() {
     COPY_FROM_ROOT="$PWD"
     COPY_TO_ROOT="$1"
   else
-    >&2 printf -- "usage: cpj [target_directory-$PWD] destination_directory\n"
+    >&2 printf -- "usage: cpj [target_directory-%s] destination_directory\n" "$PWD"
     exit 1
   fi
+
+  junc-copy "$COPY_FROM_ROOT" "$COPY_TO_ROOT"
 
   pushj "$COPY_TO_ROOT"
     DEST_JUNC_PATH="$PWD"

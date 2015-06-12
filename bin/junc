@@ -71,6 +71,7 @@ shift $((OPTIND-1))
 
 if [ -n "$1" ] ; then
   dir_path="$1"
+  mkdir -p "$dir_path"
   shift
 fi
 
