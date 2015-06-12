@@ -28,9 +28,9 @@ pushj "$COPY_TO_ROOT"
     for item_path in *; do
       COPY_TO_JUNC_PATH="$COPY_TO_JUNC/$item_path"
       if [ -d "$item_path" ]; then
-        pushj "$item_path"
+        pushd "$item_path"
           cpj "$COPY_TO_JUNC_PATH"
-        popj
+        popd
       else
         cp "$item_path" "$COPY_TO_JUNC_PATH"
       fi
