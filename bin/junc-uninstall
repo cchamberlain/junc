@@ -3,12 +3,16 @@
 # usage:
 # ### Install and resource bashrc to get new functions
 # npm install -g junc
-# junc-install ["$BASHRC_PATH"]
-# . "$BASHRC_PATH"
+# junc-install
+# . ~/.bashrc
 #
 # ### Use similiar to pushd / popd to move to a temporary junctioned directory
 # pushj [directory-path]
 # popj
+#
+# cdj [directory]
+#
+# cpj [target-directory] destination-directory
 
 RC_PATH="${1-"$HOME/.juncrc"}"
 [ -f "$RC_PATH" ] && rm "$RC_PATH"

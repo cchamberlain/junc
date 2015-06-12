@@ -4,7 +4,7 @@
 # ### Install and resource bashrc to get new functions
 # npm install -g junc
 # junc-install
-# . ~/.juncrc
+# . ~/.bashrc
 #
 # ### Use similiar to pushd / popd to move to a temporary junctioned directory
 # pushj [directory-path]
