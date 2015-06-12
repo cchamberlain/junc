@@ -34,13 +34,6 @@ cpj() {
   fi
 
   junc-copy "$COPY_FROM_ROOT" "$COPY_TO_ROOT"
-
-  pushj "$COPY_TO_ROOT"
-    DEST_JUNC_PATH="$PWD"
-    pushj "$COPY_FROM_ROOT"
-      cp -rf ./ "$DEST_JUNC_PATH"
-    popj
-  popj
 }
 
 export -f pushj
