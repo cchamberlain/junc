@@ -23,5 +23,5 @@ cp "$RC_SRC_PATH" "$RC_PATH"
 
 SOURCE_STRING=". $RC_PATH"
 if ! grep -q "$SOURCE_STRING" "$BASHRC_PATH"; then
-  printf -- "%s" "$SOURCE_STRING" >>"$BASHRC_PATH"
+  printf -- "\n%b\n" "$SOURCE_STRING" >>"$BASHRC_PATH"
 fi
