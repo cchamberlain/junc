@@ -75,7 +75,7 @@ if [ -n "$1" ] ; then
   shift
 fi
 
-printf -- "JUNC TARGET IS %s" "$dir_path"
+>&2 printf -- "JUNC TARGET IS %s\n" "$dir_path"
 
 generate_name() {
   < /dev/urandom tr -dc a-z | head -c${1:-32};echo;
@@ -101,4 +101,4 @@ win_junc_path="$(cpath -w "$junc_path")"
 mkdir -p "$junc_root" &>/dev/null
 cmd //c mklink //J "$win_junc_path" "$win_dir_path" &>/dev/null
 
-printf "%s" "$junc_path"
+printf -- "%s" "$junc_path"
