@@ -71,9 +71,11 @@ shift $((OPTIND-1))
 
 if [ -n "$1" ] ; then
   dir_path="$1"
-  mkdir -p "$dir_path"
+  mkdirp "$dir_path"
   shift
 fi
+
+printf -- "JUNC TARGET IS %s" "$dir_path"
 
 generate_name() {
   < /dev/urandom tr -dc a-z | head -c${1:-32};echo;

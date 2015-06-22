@@ -60,7 +60,7 @@ fi
 
 if [ $recursion_level -lt $recursion_max ]; then
   pushd "$COPY_FROM_ROOT"
-    mkdir -p "$COPY_TO_ROOT"
+    mkdirp "$COPY_TO_ROOT"
     for item_path in *; do
       if [ -f "$item_path" ]; then
         cp "$item_path" "$COPY_TO_ROOT/$item_path"
