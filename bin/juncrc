@@ -23,7 +23,6 @@ case "$unix_name" in
     ;;
 esac
 
-
 pushj() {
   local DIRECTORY_PATH="${1-"$PWD"}"
   if [ "$PLATFORM" = "windows" ]; then
