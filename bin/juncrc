@@ -15,11 +15,44 @@
 #
 # cpj [target-directory] destination-directory
 
-pushj() { pushd "$(junc "$@")"; }
-popj() { local JUNC_PATH="$PWD"; popd; junc -d "$JUNC_PATH"; }
-cdj() { cd "$(junc "$@")"; }
+unix_name="$(uname)"
+shopt -s nocasematch
+case "$unix_name" in
+  *windows*|*ming*)
+    PLATFORM="windows"
+    ;;
+esac
 
-# Copy directory 1 contents to directory 2 using junctions
+
+pushj() {
+  local DIRECTORY_PATH="${1-"$PWD"}"
+  if [ "$PLATFORM" = "windows" ]; then
+    printf -- "%s <- " "$DIRECTORY_PATH"
+    pushd "$(junc "$JUNC_PATH")"
+  else
+    pushd "$DIRECTORY_PATH"
+  fi
+}
+
+popj() {
+  if [ "$PLATFORM" = "windows" ]; then
+    local JUNC_PATH="$PWD"
+    popd
+    junc -d "$JUNC_PATH"
+  else
+    popd
+  fi
+}
+
+cdj() {
+  if [ "$PLATFORM" = "windows" ]; then
+    cd "$(junc "$@")"
+  else
+    cd "$@"
+  fi
+}
+
+# Copy directory 1 contents to directory 2 using junctions (cp -rf)
 cpj() {
   local COPY_FROM_ROOT=""
   local COPY_TO_ROOT=""
@@ -33,8 +66,11 @@ cpj() {
     >&2 printf -- "usage: cpj [target_directory-%s] destination_directory\n" "$PWD"
     exit 1
   fi
-
-  junc-copy "$COPY_FROM_ROOT" "$COPY_TO_ROOT"
+  if [ "$PLATFORM" = "windows" ]; then
+    junc-copy "$COPY_FROM_ROOT" "$COPY_TO_ROOT"
+  else
+    cp -rf
+  fi
 }
 
 export -f pushj
